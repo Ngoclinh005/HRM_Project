@@ -1,10 +1,12 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 
 # Virtual environment
 .venv/
 venv/
+env/
 
 # Django
 *.log
@@ -15,6 +17,7 @@ staticfiles/
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # IDE
 .vscode/
