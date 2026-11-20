@@ -26,7 +26,11 @@ jobs:
         run: uv sync --dev
 
       - name: Deploy to Cloudflare
-        run: uv run pywrangler deploy
+        run: |
+          printf 'DJANGO_SECRET_KEY=%s\n' "$DJANGO_SECRET_KEY" > .secrets.env
+          trap 'rm -f .secrets.env' EXIT
+          uv run pywrangler deploy --secrets-file .secrets.env
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
