@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "hrm-project",
+  "main": "src/index.py",
+  "compatibility_date": "2026-11-20",
+  "compatibility_flags": ["python_workers"],
+  "secrets": {
+    "required": ["DJANGO_SECRET_KEY"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}
