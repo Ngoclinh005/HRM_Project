@@ -1,0 +1,830 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRM Project - Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #253247;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #17243a;
+            color: #fff;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 28px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #4f8cff;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .brand-sub {
+            color: #9eabc0;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .menu-title {
+            color: #8998ae;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 10px 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            margin: 4px 0;
+            border-radius: 9px;
+            color: #c5cfdd;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: #243651;
+        }
+
+        .menu-item.active {
+            background: #3478f6;
+            color: #fff;
+        }
+
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 76px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            border-bottom: 1px solid #e9edf3;
+        }
+
+        .search {
+            width: 300px;
+            padding: 11px 14px;
+            border: 1px solid #e4e9f1;
+            border-radius: 9px;
+            background: #f8fafc;
+            outline: none;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification {
+            font-size: 20px;
+            position: relative;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #dce8ff;
+            color: #2864cb;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 30px 32px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .page-heading h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #7a8798;
+            font-size: 14px;
+        }
+
+        .date-btn {
+            padding: 11px 15px;
+            border: 1px solid #e0e6ef;
+            border-radius: 9px;
+            background: #fff;
+            color: #34445a;
+        }
+
+        /* KPI CARDS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border: 1px solid #edf0f5;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 2px 8px rgba(30, 50, 80, 0.03);
+        }
+
+        .kpi-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .kpi-label {
+            color: #758297;
+            font-size: 13px;
+        }
+
+        .kpi-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            font-size: 19px;
+        }
+
+        .blue { background: #eaf1ff; }
+        .green { background: #e6f8ef; }
+        .orange { background: #fff2e2; }
+        .purple { background: #f1eaff; }
+
+        .kpi-value {
+            font-size: 29px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .kpi-note {
+            color: #8a96a8;
+            font-size: 12px;
+        }
+
+        .kpi-note strong {
+            color: #1aa36b;
+        }
+
+        /* CHARTS */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid #edf0f5;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+        }
+
+        .panel-header span {
+            font-size: 12px;
+            color: #8a96a8;
+        }
+
+        .bar-chart {
+            height: 230px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 12px;
+            padding: 15px 5px 0;
+            border-bottom: 1px solid #e9edf3;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0,
+                transparent 48px,
+                #f0f3f8 49px,
+                #f0f3f8 50px
+            );
+        }
+
+        .bar-group {
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            position: relative;
+        }
+
+        .bar {
+            width: 17px;
+            border-radius: 5px 5px 0 0;
+            background: #4f8cff;
+        }
+
+        .bar.secondary {
+            background: #a9c6ff;
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 12px;
+            color: #8a96a8;
+            font-size: 11px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 18px;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #748196;
+        }
+
+        .legend span::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 3px;
+            background: #4f8cff;
+            margin-right: 6px;
+        }
+
+        .legend span:last-child::before {
+            background: #a9c6ff;
+        }
+
+        /* DEPARTMENT */
+        .department-list {
+            display: flex;
+            flex-direction: column;
+            gap: 19px;
+        }
+
+        .department-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .department-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .department-info span:last-child {
+            color: #748196;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 20px;
+            background: #eff2f7;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            background: #4f8cff;
+        }
+
+        /* TABLE */
+        .table-panel {
+            background: #fff;
+            border: 1px solid #edf0f5;
+            border-radius: 14px;
+            padding: 22px;
+            overflow-x: auto;
+        }
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .employee-table th {
+            text-align: left;
+            padding: 13px 10px;
+            font-size: 12px;
+            color: #8995a7;
+            font-weight: 600;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .employee-table td {
+            padding: 14px 10px;
+            border-bottom: 1px solid #f0f2f6;
+            font-size: 13px;
+        }
+
+        .employee-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .employee-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #edf2ff;
+            color: #4f73ca;
+            font-weight: 700;
+        }
+
+        .employee-name {
+            font-weight: 600;
+        }
+
+        .employee-email {
+            color: #8a96a8;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            background: #e6f8ef;
+            color: #168754;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #9aa5b5;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1100px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 68px;
+                padding: 18px 8px;
+            }
+
+            .brand-name,
+            .brand-sub,
+            .menu-title,
+            .menu-text {
+                display: none;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0 0 20px;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 12px 5px;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .search {
+                width: 160px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-heading h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">H</div>
+            <div>
+                <div class="brand-name">HRM Project</div>
+                <div class="brand-sub">Human Resource Management</div>
+            </div>
+        </div>
+
+        <div class="menu-title">Tổng quan</div>
+
+        <a href="#" class="menu-item active">
+            <span class="menu-icon">▦</span>
+            <span class="menu-text">Dashboard</span>
+        </a>
+
+        <div class="menu-title">Quản lý nhân sự</div>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">♙</span>
+            <span class="menu-text">Nhân viên</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">▤</span>
+            <span class="menu-text">Phòng ban</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">◷</span>
+            <span class="menu-text">Chấm công</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">▣</span>
+            <span class="menu-text">Ca làm việc</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">♧</span>
+            <span class="menu-text">Nghỉ phép</span>
+        </a>
+
+        <div class="menu-title">Lương & báo cáo</div>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">＄</span>
+            <span class="menu-text">Bảng lương</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">▥</span>
+            <span class="menu-text">Báo cáo</span>
+        </a>
+
+        <div class="menu-title">Hệ thống</div>
+
+        <a href="#" class="menu-item">
+            <span class="menu-icon">⚙</span>
+            <span class="menu-text">Cài đặt</span>
+        </a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="topbar">
+            <input class="search" type="text" placeholder="Tìm kiếm nhân viên...">
+
+            <div class="top-right">
+                <div class="notification">♧</div>
+                <div class="avatar">AD</div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Tổng quan</h1>
+                    <p>Xin chào Admin! Chào mừng bạn đến với hệ thống quản lý nhân sự.</p>
+                </div>
+
+                <button class="date-btn">📅 Tháng 11, 2026</button>
+            </div>
+
+            <!-- KPI -->
+            <section class="kpi-grid">
+
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <div class="kpi-label">Tổng nhân viên</div>
+                        <div class="kpi-icon blue">♙</div>
+                    </div>
+                    <div class="kpi-value">128</div>
+                    <div class="kpi-note"><strong>+8%</strong> so với tháng trước</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <div class="kpi-label">Có mặt hôm nay</div>
+                        <div class="kpi-icon green">✓</div>
+                    </div>
+                    <div class="kpi-value">112</div>
+                    <div class="kpi-note">87.5% tổng nhân viên</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <div class="kpi-label">Đang nghỉ phép</div>
+                        <div class="kpi-icon orange">♧</div>
+                    </div>
+                    <div class="kpi-value">8</div>
+                    <div class="kpi-note">5 nhân viên nghỉ có phép</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <div class="kpi-label">Chưa check-in</div>
+                        <div class="kpi-icon purple">◷</div>
+                    </div>
+                    <div class="kpi-value">8</div>
+                    <div class="kpi-note">Cần kiểm tra chấm công</div>
+                </div>
+
+            </section>
+
+            <!-- CHARTS -->
+            <section class="charts-grid">
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Thống kê chấm công</h3>
+                        <span>7 ngày gần nhất</span>
+                    </div>
+
+                    <div class="bar-chart">
+                        <div class="bar-group">
+                            <div class="bar" style="height:72%"></div>
+                            <div class="bar secondary" style="height:35%"></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height:85%"></div>
+                            <div class="bar secondary" style="height:30%"></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height:68%"></div>
+                            <div class="bar secondary" style="height:42%"></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height:90%"></div>
+                            <div class="bar secondary" style="height:25%"></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height:80%"></div>
+                            <div class="bar secondary" style="height:32%"></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height:55%"></div>
+                            <div class="bar secondary" style="height:48%"></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height:40%"></div>
+                            <div class="bar secondary" style="height:55%"></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-labels">
+                        <span>T2</span><span>T3</span><span>T4</span>
+                        <span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+                    </div>
+
+                    <div class="legend">
+                        <span>Có mặt</span>
+                        <span>Vắng / nghỉ</span>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Nhân sự theo phòng ban</h3>
+                        <span>128 nhân viên</span>
+                    </div>
+
+                    <div class="department-list">
+
+                        <div class="department-row">
+                            <div class="department-info">
+                                <span>Kỹ thuật</span><span>38 người</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width:80%"></div>
+                            </div>
+                        </div>
+
+                        <div class="department-row">
+                            <div class="department-info">
+                                <span>Kinh doanh</span><span>32 người</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width:67%; background:#42c99a"></div>
+                            </div>
+                        </div>
+
+                        <div class="department-row">
+                            <div class="department-info">
+                                <span>Nhân sự</span><span>20 người</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width:42%; background:#ffb454"></div>
+                            </div>
+                        </div>
+
+                        <div class="department-row">
+                            <div class="department-info">
+                                <span>Kế toán</span><span>18 người</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width:38%; background:#9b83f5"></div>
+                            </div>
+                        </div>
+
+                        <div class="department-row">
+                            <div class="department-info">
+                                <span>Marketing</span><span>20 người</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width:42%; background:#f47e9c"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- EMPLOYEES -->
+            <section class="table-panel">
+
+                <div class="panel-header">
+                    <h3>Nhân viên mới</h3>
+                    <span>Danh sách nhân viên gần đây</span>
+                </div>
+
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th>NHÂN VIÊN</th>
+                            <th>PHÒNG BAN</th>
+                            <th>CHỨC VỤ</th>
+                            <th>NGÀY VÀO</th>
+                            <th>TRẠNG THÁI</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">NA</div>
+                                    <div>
+                                        <div class="employee-name">Nguyễn Minh Anh</div>
+                                        <div class="employee-email">minhanh@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Kỹ thuật</td>
+                            <td>Developer</td>
+                            <td>15/11/2026</td>
+                            <td><span class="status">Đang làm việc</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">TH</div>
+                                    <div>
+                                        <div class="employee-name">Trần Hoàng</div>
+                                        <div class="employee-email">hoang@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Kinh doanh</td>
+                            <td>Sales Executive</td>
+                            <td>12/11/2026</td>
+                            <td><span class="status">Đang làm việc</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">PL</div>
+                                    <div>
+                                        <div class="employee-name">Phạm Linh</div>
+                                        <div class="employee-email">linh@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Nhân sự</td>
+                            <td>HR Assistant</td>
+                            <td>10/11/2026</td>
+                            <td><span class="status">Đang làm việc</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">LH</div>
+                                    <div>
+                                        <div class="employee-name">Lê Hoàng</div>
+                                        <div class="employee-email">lehoang@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Marketing</td>
+                            <td>Marketing Executive</td>
+                            <td>05/11/2026</td>
+                            <td><span class="status">Đang làm việc</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </section>
+
+            <div class="footer">
+                © 2026 HRM Project · Hệ thống quản lý nhân sự
+            </div>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>
